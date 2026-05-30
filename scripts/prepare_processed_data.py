@@ -7,9 +7,20 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.data.preprocess import preprocess_data
 from src.features.build_features import build_features
 
-RAW = "data/raw/Telco-Customer-Churn.csv"
-OUT = "data/processed/telco_churn_processed.csv"
+# RAW = "data/raw/Telco-Customer-Churn.csv"
+# OUT = "data/processed/telco_churn_processed.csv"
+# print(RAW)
 
+from pathlib import Path
+
+# Always resolves to project root regardless of where notebook runs from
+BASE_DIR = Path(__file__).parent if "__file__" in dir() else Path.cwd()
+PROJECT_ROOT = BASE_DIR.parent if BASE_DIR.name in ["notebooks", "scripts"] else BASE_DIR
+
+RAW = str(PROJECT_ROOT / "data" / "raw" / "Telco-Customer-Churn.csv")
+OUT = str(PROJECT_ROOT / "data" / "processed" / "telco_churn_processed.csv")
+
+print(RAW)  # Verify path is correct
 # 1) load raw
 df = pd.read_csv(RAW)
 

@@ -27,12 +27,15 @@ Production Deployment:
 import os
 import pandas as pd
 import mlflow
+from dotenv import load_dotenv
+load_dotenv()
 
 # === MODEL LOADING CONFIGURATION ===
 # IMPORTANT: This path is set during Docker container build
 # In development: uses local MLflow artifacts
 # In production: uses model copied to container at build time
-MODEL_DIR = "/app/model"
+# MODEL_DIR = "/app/model"
+MODEL_DIR = os.environ.get("MODEL_DIR", "/app/model")
 
 try:
     # Load the trained XGBoost model in MLflow pyfunc format
@@ -60,7 +63,10 @@ except Exception as e:
 # CRITICAL: Load the exact feature column order used during training
 # This ensures the model receives features in the expected order
 try:
+    # feature_file = os.path.join(MODEL_DIR, "feature_columns.txt")
     feature_file = os.path.join(MODEL_DIR, "feature_columns.txt")
+    if not os.path.exists(feature_file):
+        feature_file = os.path.join(os.path.dirname(MODEL_DIR), "feature_columns.txt")
     with open(feature_file) as f:
         FEATURE_COLS = [ln.strip() for ln in f if ln.strip()]
     print(f"✅ Loaded {len(FEATURE_COLS)} feature columns from training")
