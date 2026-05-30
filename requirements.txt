@@ -33,7 +33,7 @@ databricks-sdk==0.112.0
 # Web / API
 Flask==3.1.1
 Flask-Cors==5.0.0
-fastapi==0.115.0
+fastapi==0.115.2
 uvicorn==0.30.5
 gunicorn==22.0.0
 starlette==0.38.6
